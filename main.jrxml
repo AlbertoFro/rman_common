@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rman" language="groovy" pageWidth="842" pageHeight="800" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e2c682de-fb8f-4005-89a1-87d1f003d71b">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="rman_common XE"/>
+	<property name="ireport.jasperserver.url" value="http://reporter:8080/jasperserver/services/repository/"/>
+	<property name="ireport.jasperserver.report.resource" value="/reports/SVIL/RMAN/rman_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/reports/SVIL/RMAN/rman"/>
+	<parameter name="DATA_INIZIO1" class="java.sql.Timestamp"/>
+	<parameter name="DATA_FINE1" class="java.sql.Timestamp">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="DB_NAME" class="java.lang.String"/>
+	<parameter name="OBJECT" class="java.lang.String"/>
+	<parameter name="TARGET" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT * FROM RMAN_REPORT_J
+where db_name = $P{DB_NAME} 
+and trunc(backup_begin) >  $P{DATA_INIZIO1} 
+and trunc(backup_end) <  $P{DATA_FINE1} 
+and backup_object =  $P{OBJECT} 
+and target_device  = $P{TARGET} 
+order by session_recid desc]]>
+	</queryString>
+	<field name="DB_NAME" class="java.lang.String"/>
+	<field name="BACKUP_OBJECT" class="java.lang.String"/>
+	<field name="TARGET_DEVICE" class="java.lang.String"/>
+	<field name="STATUS" class="java.lang.String"/>
+	<field name="BACKUPSIZE_MB" class="java.math.BigDecimal"/>
+	<field name="BACKUPSPEEDPERSEC_MB" class="java.math.BigDecimal"/>
+	<field name="TIME_TAKEN" class="java.lang.String"/>
+	<field name="BACKUP_BEGIN" class="java.sql.Timestamp"/>
+	<field name="BACKUP_END" class="java.sql.Timestamp"/>
+	<field name="SESSION_RECID" class="java.math.BigDecimal"/>
+	<group name="DB_NAME">
+		<groupExpression><![CDATA[$F{DB_NAME}]]></groupExpression>
+	</group>
+	<group name="BACKUP_OBJECT">
+		<groupExpression><![CDATA[$F{BACKUP_OBJECT}]]></groupExpression>
+	</group>
+	<group name="TARGET_DEVICE">
+		<groupExpression><![CDATA[$F{TARGET_DEVICE}]]></groupExpression>
+	</group>
+	<group name="STATUS">
+		<groupExpression><![CDATA[$F{STATUS}]]></groupExpression>
+	</group>
+	<group name="BACKUPSIZE_MB">
+		<groupExpression><![CDATA[$F{BACKUPSIZE_MB}]]></groupExpression>
+	</group>
+	<group name="BACKUPSPEEDPERSEC_MB">
+		<groupExpression><![CDATA[$F{BACKUPSPEEDPERSEC_MB}]]></groupExpression>
+	</group>
+	<group name="TIME_TAKEN">
+		<groupExpression><![CDATA[$F{TIME_TAKEN}]]></groupExpression>
+	</group>
+	<group name="BACKUP_BEGIN">
+		<groupExpression><![CDATA[$F{BACKUP_BEGIN}]]></groupExpression>
+	</group>
+	<group name="BACKUP_END">
+		<groupExpression><![CDATA[$F{BACKUP_END}]]></groupExpression>
+	</group>
+	<group name="SESSION_RECID">
+		<groupExpression><![CDATA[$F{SESSION_RECID}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="82" splitType="Stretch">
+			<staticText>
+				<reportElement x="40" y="10" width="730" height="60" uuid="05573fc1-bafd-4cf6-afdb-2633122395ea"/>
+				<textElement textAlignment="Center">
+					<font size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RMAN STATUS]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="313" splitType="Stretch">
+			<lineChart>
+				<chart evaluationTime="Report">
+					<reportElement x="-10" y="20" width="820" height="280" uuid="e167fc77-5147-4aa1-94d3-06c63729dda1"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["SERIES 1"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{BACKUP_BEGIN}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{BACKUPSIZE_MB}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<linePlot>
+					<plot labelRotation="41.0"/>
+					<categoryAxisFormat labelRotation="41.0">
+						<axisFormat>
+							<tickLabelFont>
+								<font size="9"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat/>
+					</valueAxisFormat>
+				</linePlot>
+			</lineChart>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="39" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="2" width="82" height="30" uuid="41679723-ac68-4e9a-8443-19852d5eeb8d"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DB_NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="2" width="80" height="30" uuid="cde62715-2f11-4dd9-a7a0-27d6ba5b1fb8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[OBJECT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="2" width="80" height="30" uuid="c2eb6450-c978-420e-a16b-71a7e9a73778"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DEVICE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="242" y="2" width="80" height="30" uuid="db1b1eb5-fd45-4e5a-9b94-790712bcf2b2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[STATUS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="322" y="2" width="118" height="30" uuid="2b1a3ab9-4214-4b21-9b56-55dc58a916ed"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BACKUPSIZE_MB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="2" width="118" height="30" uuid="c2757977-5de4-4471-804e-2ddf1e8e23b9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[SPEEDPERSEC_MB]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="560" y="2" width="80" height="30" uuid="2d1b037c-414e-400d-92be-13e841b8295b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIME_TAKEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="640" y="2" width="80" height="30" uuid="ac24da09-f632-4c59-b2fa-a06653b0bd0a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[BEGIN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="720" y="2" width="80" height="30" uuid="f5aee2cb-58cb-49aa-8506-f6aaf36582c8">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[END]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="5" width="82" height="30" uuid="0e91139f-95ec-4c9c-8992-69f7435aee62"/>
+				<textFieldExpression><![CDATA[$F{DB_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="5" width="80" height="30" uuid="4f42e6aa-a2fb-48bb-a66f-66f05e168397"/>
+				<textFieldExpression><![CDATA[$F{BACKUP_OBJECT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="162" y="5" width="80" height="30" uuid="7e1788fb-ba05-41b2-88e4-1fff60fef991"/>
+				<textFieldExpression><![CDATA[$F{TARGET_DEVICE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="242" y="5" width="80" height="30" uuid="36b5e9bc-2b29-411d-b32b-394edb7eb443"/>
+				<textFieldExpression><![CDATA[$F{STATUS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="322" y="5" width="118" height="30" uuid="192db88d-0495-4e56-8c0e-95994fe25509"/>
+				<textFieldExpression><![CDATA[$F{BACKUPSIZE_MB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="5" width="118" height="30" uuid="2285be2c-8109-4e8f-9836-93391329ec32"/>
+				<textFieldExpression><![CDATA[$F{BACKUPSPEEDPERSEC_MB}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="560" y="5" width="80" height="30" uuid="cf8e5200-4572-4995-9cc2-f7bb33575b4a"/>
+				<textFieldExpression><![CDATA[$F{TIME_TAKEN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="640" y="5" width="80" height="30" uuid="9b2eaa12-9c98-4c0b-a8c9-7c8ce7d15d8b"/>
+				<textFieldExpression><![CDATA[$F{BACKUP_BEGIN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="720" y="5" width="80" height="30" uuid="aaae0879-cd32-47e8-8034-24b052f54d16"/>
+				<textFieldExpression><![CDATA[$F{BACKUP_END}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="4" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="4" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="7" splitType="Stretch"/>
+	</summary>
+</jasperReport>
